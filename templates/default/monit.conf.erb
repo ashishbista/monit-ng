@@ -12,21 +12,21 @@ set pidfile <%= @pid_file %>
 
 <% @mail_servers.each do |mailserver| %>
 set mailserver
-  <%= mailserver.hostname %>
-  <% if mailserver.key?('port') && mailserver.port %>
-  port <%= mailserver.port %>
+  <%= mailserver['hostname'] %>
+  <% if mailserver.key?('port') %>
+  port <%= mailserver['port'] %>
   <% end %>
-  <% if mailserver.key?('username') && mailserver.username %>
-  username '<%= mailserver.username %>'
+  <% if mailserver.key?('username') %>
+  username '<%= mailserver['username'] %>'
   <% end %>
-  <% if mailserver.key?('password') && mailserver.password %>
-  password '<%= mailserver.password %>'
+  <% if mailserver.key?('password')  %>
+  password '<%= mailserver['password'] %>'
   <% end %>
-  <% if mailserver.key?('security') && mailserver.security %>
-  using <%= mailserver.security.upcase %>
+  <% if mailserver.key?('security') %>
+  using <%= mailserver['security'] %>
   <% end %>
-  <% if mailserver.key?('timeout') && mailserver.timeout %>
-  with timeout <%= mailserver.timeout %>
+  <% if mailserver.key?('timeout') %>
+  with timeout <%= mailserver['timeout'] %>
   <% end %>
 
 <% end %>
@@ -37,13 +37,13 @@ set mail-format {
 }
 
 <% @alert.each do |alert| %>
-set alert <%= alert.name %>
+set alert <%= alert['name'] %>
 <% if alert.has_key?('only_on') -%>
-  only on { <%= alert.only_on.join(', ') %> }
+  only on { <%= alert['only_on'].join(', ') %> }
 <% elsif alert.has_key?('subscriptions') -%>
-  only on { <%= alert.subscriptions.join(', ') %> }
+  only on { <%= alert['subscriptions'].join(', ') %> }
 <% elsif alert.has_key?('but_not_on') -%>
-  but not on { <%= alert.but_not_on.join(', ') %> }
+  but not on { <%= alert['but_not_on'].join(', ') %> }
 <% end -%>
 
 <% end %>
@@ -71,4 +71,3 @@ set mmonit <%= @mmonit_url %>
 <% end %>
 
 include <%= @conf_dir %>/*.conf
-include <%= @conf_dir %>/*.monitrc
